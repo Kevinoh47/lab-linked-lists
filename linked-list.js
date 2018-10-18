@@ -86,37 +86,43 @@ class LinkedList {
   // remove a node from the linked list
   remove(offset) {
     let current = this.head;
-    let counter = 1;
-    let previous = current;
+    let counter = 0;
+    let previous;
 
+    // remove the head
+    if (current === this.head && counter === offset) {
+      this.head = current.next;
+      current.next = null;
+      this.length--;
+      return this;
+    }
+    // remove one from inside
     while (current.next) {
-      // removing the head
-      if (current === this.head) {
+      if (counter === offset) {
+        previous.next = current.next;
         current.next = null;
         this.length--;
-        break;
-      }
-      else if (counter === offset) {
-        // remove one from inside
-        if (current.next !== null) {
-          previous.next = current.next;
-          current.next = null;
-          this.length--;
-          break;
-        }
-        // remove last node
-        else if (current.next === null) {
-          previous.next = null;
-          this.length--;
-          break;
-        }
+        return this;
       }
       previous = current;
       current = current.next;
       counter++;
     }
+    // removing the tail
+    if (!current.next && counter === offset) {
+      previous.next = null;
+      this.length--;
+    }
     return this;
   }
+
+  // serialize() {
+  //   let current = this.head;
+
+  //   while (current.next) {
+
+  //   }
+  // }
 }
 
 module.exports = LinkedList;
