@@ -58,57 +58,68 @@ class LinkedList {
   }
 
   // reverse the linked list so that the "tail" is now head 
-  // Big O for time: O(n)
-  // Big O for space: O(1)
-  // reverse() {
-  //   let current = this.head;
-  //   let myPrevious = null;
+  // Big O for time: O(3n)
+  // Big O for space: O(2n)
+  reverse() {
+    let current = this.head;
+    let myPrevious = null;
 
-  //   while (current.next) {
-  //     current.previous = myPrevious;
-  //     myPrevious = current;
-  //     current = current.next;
-  //   }
-  //   if (current.next === null) {
-  //     current.previous = myPrevious;
-  //   }
-  //   console.log(this);
-  //   return this;
-  // }
+    while (current.next) {
+      console.log('current: ', current.value);
+      console.log('myPrevious: ', (myPrevious === null ? null : myPrevious.value));
+      console.log('currentNext: ', (current.next === null ? null : current.next.value));
+      current.previous = myPrevious;
+      myPrevious = current;
+      current = current.next;
+    }
+    // set the tail:
+    if (current.next === null) {
+      current.previous = myPrevious;
 
-  // reverse() {
-  //   console.log('reversing...');
+      console.log('current: ', current.value);
+      console.log('new current next: ', (current.next === null ? null : current.next.value));
+      console.log('current Previous: ', (current.previous === null ? null : current.previous.value));
 
-  //   let previous = null;
-  //   let current = this.head;
-  //   let penultimate = false;
-  //   let peakAhead;
+      this.head = current; // the last shall be first
+    }
+
+    console.log('...........');
+    console.log('...........');
+    console.log ('new head: ', this.head.value);
+    console.log('...........');
+    console.log('...........');
+
+    // now iterate backwards
+    while (current.previous) {
+      current.next = current.previous;
+      console.log('current: ', current.value);
+      console.log('new current next: ', (current.next === null ? null : current.next.value));
+      console.log('current Previous: ', (current.previous === null ? null : current.previous.value));
+      current = current.previous;
+    }
+
+    // set the tail:
+    if (current.previous === null) {
+      current.next = null;
+
+      console.log('current: ', current.value);
+      console.log('new current next: ', (current.next === null ? null : current.next.value));
+      console.log('current Previous: ', (current.previous === null ? null : current.previous.value));
+    }
+
+    // clean up
+    while (current.next) {  
+      delete current.previous;
+      console.log('clean up... previous: ', current.previous, '... and next: ', current.next.value);
+      current = current.next;
+    }
+    if (current.next === null) {
+      delete current.previous;
+    }
     
-  //   console.log('current: ', current);
+    return this;
+  }
 
-  //   // // loop manages all but the tail
-  //   while (current.next && !penultimate) {
-  //     console.log('looping ... current: ', current.value);
-      
-      
-
-  //     peakAhead  = current.next;
-  //     if (peakAhead.next === null) {
-  //       console.log('we are at the penultimate node... ');
-  //       penultimate = true;
-  //     }
-  //     //current.next = previous;
-  //     current = current.next;
-  //   }
-  //   console.log('out of loop! ', current.value);
-  //   // // last shall be first
-  //   if (current.next === null) {
-  //     current.next = previous;
-  //     this.head = current; 
-  //   }
-    
-  //   return this;
-  // }
 
   // remove a node from the linked list
   // Big O for time: O(n)

@@ -2,20 +2,6 @@
 
 const LinkedList = require('./linked-list.js');
 
-
-let carList = new LinkedList();
-console.log(carList);
-
-carList.append('Austin Healy');
-carList.append('BMW i');
-carList.append('Chevy Volt');
-carList.append('Dodge Viper');
-carList.append('Nissan Leaf');
-carList.append('Tesla Model C');
-
-console.log(carList);
-
-
 // let dinnerList = new LinkedList();
 // console.log(dinnerList);
 // dinnerList.append('cheese');
@@ -32,12 +18,32 @@ console.log(carList);
 // dinnerList.prepend('appertif');
 // console.log(dinnerList);
 
+let carList = new LinkedList();
+//console.log(carList);
+
+carList.append('Austin Healy');
+carList.append('BMW i');
+carList.append('Chevy Volt');
+carList.append('Dodge Viper');
+carList.append('Ford Focus Electric');
+carList.append('Nissan Leaf');
+carList.append('Tesla Model C');
+
 console.log(carList);
-// console.log('test reverse function');
-// carList.reverse();
+
+// reverse appears to work
+console.log(' ');
+console.log('test reverse function ...');
+console.log(' ');
+console.log(' ');
+carList.reverse();
+console.log(' ');
+console.log(' ');
+console.log(carList);
+console.log(' ');
 
 // remove works!
-console.log('test remove function');
-carList.remove(0);
-console.log(carList);
+// console.log('test remove function');
+// carList.remove(0);
+// console.log(carList);
 
