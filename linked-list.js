@@ -1,6 +1,6 @@
 'use strict';
 
-const Node = require('node.js');
+const Node = require('./node.js');
 
 class LinkedList {
   constructor() {
@@ -60,30 +60,59 @@ class LinkedList {
   // reverse the linked list so that the "tail" is now head 
   // Big O for time: O(n)
   // Big O for space: O(1)
-  reverse() {
-    let previous = null;
-    let current = this.head;
-    let newNext = this.head.next;
-    let setNewHead = false;
+  // reverse() {
+  //   let current = this.head;
+  //   let myPrevious = null;
+
+  //   while (current.next) {
+  //     current.previous = myPrevious;
+  //     myPrevious = current;
+  //     current = current.next;
+  //   }
+  //   if (current.next === null) {
+  //     current.previous = myPrevious;
+  //   }
+  //   console.log(this);
+  //   return this;
+  // }
+
+  // reverse() {
+  //   console.log('reversing...');
+
+  //   let previous = null;
+  //   let current = this.head;
+  //   let penultimate = false;
+  //   let peakAhead;
     
-    while (current.next && !setNewHead) {
-      if (previous === null) {
-        previous = current; 
-        current.next = null; //this will now be the tail
-      }
-      else {
-        if (!current.next) {
-          this.head = current; // last is now first.
-          setNewHead = true;
-        }
-        current.next = newNext;
-        newNext = previous;
-      }
-    }
-    return this;
-  }
+  //   console.log('current: ', current);
+
+  //   // // loop manages all but the tail
+  //   while (current.next && !penultimate) {
+  //     console.log('looping ... current: ', current.value);
+      
+      
+
+  //     peakAhead  = current.next;
+  //     if (peakAhead.next === null) {
+  //       console.log('we are at the penultimate node... ');
+  //       penultimate = true;
+  //     }
+  //     //current.next = previous;
+  //     current = current.next;
+  //   }
+  //   console.log('out of loop! ', current.value);
+  //   // // last shall be first
+  //   if (current.next === null) {
+  //     current.next = previous;
+  //     this.head = current; 
+  //   }
+    
+  //   return this;
+  // }
 
   // remove a node from the linked list
+  // Big O for time: O(n)
+  // Big O for space O(1)
   remove(offset) {
     let current = this.head;
     let counter = 0;
@@ -116,10 +145,30 @@ class LinkedList {
     return this;
   }
 
+  // hmm... but what if the value isn't JSON?
+  // Big O for time: O(n)
+  // Big O for space O(2n)
   serialize() {
     let current = this.head;
     while (current.next) {
-      return JSON.stringify(this.current);
+      return JSON.stringify(this.current.value);
+    }
+    //don't forget the tail:
+    if (!current.next) {
+      return JSON.stringify(this.current.value);
+    }
+  }
+
+  // Big O for time: O(n)
+  // Big O for space O(2n)
+  deserialize() {
+    let current = this.head;
+    while (current.next) {
+      return JSON.parse(current.value); 
+    }
+    //don't forget the tail:
+    if (!current.next) {
+      return JSON.parse(current.value); 
     }
   }
 }
