@@ -116,13 +116,12 @@ class LinkedList {
     return this;
   }
 
-  // serialize() {
-  //   let current = this.head;
-
-  //   while (current.next) {
-
-  //   }
-  // }
+  serialize() {
+    let current = this.head;
+    while (current.next) {
+      return JSON.stringify(this.current);
+    }
+  }
 }
 
 module.exports = LinkedList;
