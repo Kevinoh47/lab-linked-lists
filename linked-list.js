@@ -65,9 +65,6 @@ class LinkedList {
     let myPrevious = null;
 
     while (current.next) {
-      console.log('current: ', current.value);
-      console.log('myPrevious: ', (myPrevious === null ? null : myPrevious.value));
-      console.log('currentNext: ', (current.next === null ? null : current.next.value));
       current.previous = myPrevious;
       myPrevious = current;
       current = current.next;
@@ -75,42 +72,22 @@ class LinkedList {
     // set the tail:
     if (current.next === null) {
       current.previous = myPrevious;
-
-      console.log('current: ', current.value);
-      console.log('new current next: ', (current.next === null ? null : current.next.value));
-      console.log('current Previous: ', (current.previous === null ? null : current.previous.value));
-
       this.head = current; // the last shall be first
     }
-
-    console.log('...........');
-    console.log('...........');
-    console.log ('new head: ', this.head.value);
-    console.log('...........');
-    console.log('...........');
 
     // now iterate backwards
     while (current.previous) {
       current.next = current.previous;
-      console.log('current: ', current.value);
-      console.log('new current next: ', (current.next === null ? null : current.next.value));
-      console.log('current Previous: ', (current.previous === null ? null : current.previous.value));
       current = current.previous;
     }
-
     // set the tail:
     if (current.previous === null) {
       current.next = null;
-
-      console.log('current: ', current.value);
-      console.log('new current next: ', (current.next === null ? null : current.next.value));
-      console.log('current Previous: ', (current.previous === null ? null : current.previous.value));
     }
 
     // clean up
     while (current.next) {  
       delete current.previous;
-      console.log('clean up... previous: ', current.previous, '... and next: ', current.next.value);
       current = current.next;
     }
     if (current.next === null) {
@@ -119,7 +96,6 @@ class LinkedList {
     
     return this;
   }
-
 
   // remove a node from the linked list
   // Big O for time: O(n)
@@ -159,29 +135,29 @@ class LinkedList {
   // hmm... but what if the value isn't JSON?
   // Big O for time: O(n)
   // Big O for space O(2n)
-  serialize() {
-    let current = this.head;
-    while (current.next) {
-      return JSON.stringify(this.current.value);
-    }
-    //don't forget the tail:
-    if (!current.next) {
-      return JSON.stringify(this.current.value);
-    }
-  }
+  // serialize() {
+  //   let current = this.head;
+  //   while (current.next) {
+  //     return JSON.stringify(this.current.value);
+  //   }
+  //   //don't forget the tail:
+  //   if (!current.next) {
+  //     return JSON.stringify(this.current.value);
+  //   }
+  // }
 
   // Big O for time: O(n)
   // Big O for space O(2n)
-  deserialize() {
-    let current = this.head;
-    while (current.next) {
-      return JSON.parse(current.value); 
-    }
-    //don't forget the tail:
-    if (!current.next) {
-      return JSON.parse(current.value); 
-    }
-  }
+  // deserialize() {
+  //   let current = this.head;
+  //   while (current.next) {
+  //     return JSON.parse(current.value); 
+  //   }
+  //   //don't forget the tail:
+  //   if (!current.next) {
+  //     return JSON.parse(current.value); 
+  //   }
+  // }
 }
 
 module.exports = LinkedList;
