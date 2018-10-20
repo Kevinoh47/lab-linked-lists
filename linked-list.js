@@ -41,19 +41,17 @@ class LinkedList {
   prepend(value) {
     let node = new Node(value);
 
-    // first node for the linked list
-    if (! this.head) {
-      this.head = node;
-      return this;
-    }
+    // first node for the linked list //TODO CONFIRM THIS IS NOT NECESSARY
+    // if (! this.head) {
+    //   this.head = node;
+    //   return this;
+    // }
 
     // prepend node to the head
     let newSecondNode = this.head;
     this.head = node;
-
-    // reset linked list head
     node.next = newSecondNode;
-
+  
     return this;
   }
 
@@ -105,45 +103,51 @@ class LinkedList {
     let counter = 0;
     let previous;
 
-    // remove the head
-    if (current === this.head && counter === offset) {
-      this.head = current.next;
-      current.next = null;
-      this.length--;
-      return this;
-    }
-    // remove one from inside
-    while (current.next) {
-      if (counter === offset) {
-        previous.next = current.next;
+    if (offset >= 0 && offset <= this.length) {
+      // remove the head
+      if (current === this.head && counter === offset) {
+        this.head = current.next;
         current.next = null;
         this.length--;
         return this;
       }
-      previous = current;
-      current = current.next;
-      counter++;
+      // remove one from inside
+      while (current.next) {
+        if (counter === offset) {
+          previous.next = current.next;
+          current.next = null;
+          this.length--;
+          return this;
+        }
+        previous = current;
+        current = current.next;
+        counter++;
+      }
+      // removing the tail
+      if (!current.next && counter === offset) {
+        previous.next = null;
+        this.length--;
+      }
+      return this;
+    } else {
+      return null; // should this throw an error instead?
     }
-    // removing the tail
-    if (!current.next && counter === offset) {
-      previous.next = null;
-      this.length--;
-    }
-    return this;
   }
 
   // hmm... but what if the value isn't JSON?
   // Big O for time: O(n)
   // Big O for space O(2n)
   // serialize() {
+  //   let serialized = ''; 
   //   let current = this.head;
   //   while (current.next) {
-  //     return JSON.stringify(this.current.value);
+  //     serialized += JSON.stringify(this.current) + ' ';
   //   }
   //   //don't forget the tail:
   //   if (!current.next) {
-  //     return JSON.stringify(this.current.value);
+  //     serialized += JSON.stringify(this.current);
   //   }
+  //   return serialized;
   // }
 
   // Big O for time: O(n)
@@ -151,11 +155,11 @@ class LinkedList {
   // deserialize() {
   //   let current = this.head;
   //   while (current.next) {
-  //     return JSON.parse(current.value); 
+  //     return JSON.parse(current); 
   //   }
   //   //don't forget the tail:
   //   if (!current.next) {
-  //     return JSON.parse(current.value); 
+  //     return JSON.parse(current); 
   //   }
   // }
 }
