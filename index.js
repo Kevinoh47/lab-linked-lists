@@ -33,16 +33,22 @@ carList.append('Nissan Leaf');
 carList.append('Tesla Model C');
 
 // reverse works.
-console.log('test reverse function ...');
-console.log(carList);
-console.log('reversing...');
-carList.reverse();
-console.log(carList);
+// console.log('test reverse function ...');
+// console.log(carList);
+// console.log('reversing...');
+// carList.reverse();
+// console.log(carList);
 
 // remove works!
 console.log('test remove function ...');
 console.log(carList);
 console.log('removing...');
 carList.remove(0);
+console.log(carList);
+
+console.log('test insertBefore...');
+console.log(carList);
+console.log('inserting in front of head...');
+carList.insertBefore('BMW i', 'Astin Marton');
 console.log(carList);
 
