@@ -134,6 +134,40 @@ class LinkedList {
     }
   }
 
+  // insert newValue immediately before the node containing value
+  insertBefore(value, newValue) {
+    let newNode = new Node(newValue);
+    let current = this.head;
+    let previous;
+
+    while(current.next) {
+      if (current.value === value){
+        // head
+        if (current === this.head) {
+          newNode.next = current;
+          this.head = newNode;
+          return this;
+        }
+        // inside
+        previous.next = newNode;
+        newNode.next = current;
+        return this;
+      }
+      previous = current;
+      current = current.next;
+    }
+
+    //test the tail
+    if (current.next === null) {
+      previous.next = newNode;
+      newNode.next = current;
+    }
+
+    this.length++;
+    return this;
+  }
+
+
   // hmm... but what if the value isn't JSON?
   // Big O for time: O(n)
   // Big O for space O(2n)
