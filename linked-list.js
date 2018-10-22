@@ -58,42 +58,43 @@ class LinkedList {
   // reverse the linked list so that the "tail" is now head 
   // Big O for time: O(3n)
   // Big O for space: O(2n)
-  reverse() {
-    let current = this.head;
-    let myPrevious = null;
+  // reverse() {
+  //   let current = this.head;
+  //   let myPrevious = null;
 
-    while (current.next) {
-      current.previous = myPrevious;
-      myPrevious = current;
-      current = current.next;
-    }
-    // set the tail:
-    if (current.next === null) {
-      current.previous = myPrevious;
-      this.head = current; // the last shall be first
-    }
+  //   while (current.next) {
+  //     current.previous = myPrevious;
+  //     myPrevious = current;
+  //     current = current.next;
+  //   }
+  //   // set the tail:
+  //   if (current.next === null) {
+  //     current.previous = myPrevious;
+  //     this.head = current; // the last shall be first
+  //   }
 
-    // now iterate backwards
-    while (current.previous) {
-      current.next = current.previous;
-      current = current.previous;
-    }
-    // set the tail:
-    if (current.previous === null) {
-      current.next = null;
-    }
+  //   // now iterate backwards
+  //   while (current.previous) {
+  //     current.next = current.previous;
+  //     current = current.previous;
+  //   }
+  //   // set the tail:
+  //   if (current.previous === null) {
+  //     current.next = null;
+  //   }
 
-    // clean up
-    while (current.next) {  
-      delete current.previous;
-      current = current.next;
-    }
-    if (current.next === null) {
-      delete current.previous;
-    }
+  //   // clean up
+  //   while (current.next) {  
+  //     console.log('deleting current.previous...');
+  //     delete current.previous;
+  //     current = current.next;
+  //   }
+  //   if (current.next === null) {
+  //     delete current.previous;
+  //   }
     
-    return this;
-  }
+  //   return this;
+  // }
 
   // remove a node from the linked list
   // Big O for time: O(n)
@@ -139,7 +140,6 @@ class LinkedList {
     let newNode = new Node(newValue);
     let current = this.head;
     let previous;
-    console.log('this length', this.length);
 
     while(current.next) {
       if (current.value === value){
@@ -159,14 +159,42 @@ class LinkedList {
       previous = current;
       current = current.next;
     }
-
     //test the tail
     if (current.next === null) {
-      previous.next = newNode;
-      newNode.next = current;
-      this.length++;
-      return this;
+      if (current.value === value){
+        previous.next = newNode;
+        newNode.next = current;
+        this.length++;
+        return this;
+      }
     }
+    return null;
+  }
+
+  // insert newValue immediately after the node containing value
+  insertAfter(value, newValue) {
+    let newNode = new Node(newValue);
+    let current = this.head;
+
+    while(current.next) {
+      if (current.value === value){
+        newNode.next = current.next;
+        current.next = newNode;
+        this.length++;
+        return this;
+      }
+      current = current.next;
+    }
+    //test the tail
+    if (current.next === null) {
+      if (current.value === value){
+        newNode.next = null;
+        current.next = newNode;
+        this.length++;
+        return this;
+      }
+    }
+    return null;
   }
 
 
