@@ -14,14 +14,13 @@ class LinkedList {
   append(value) {
     let node = new Node(value);
 
-    // first node for the linked list
+    // first node for the linked list (e.g. empty ll)
     if (! this.head) {
       this.head = node;
       this.length ++;
       return this;
     }
-
-    // appending subsequent nodes to the linked list
+    // appending subsequent nodes to the end of the linked list
     let current = this.head;
 
     // find the last node, which will have a next value of null
@@ -41,11 +40,11 @@ class LinkedList {
   prepend(value) {
     let node = new Node(value);
 
-    // first node for the linked list //TODO CONFIRM THIS IS NOT NECESSARY
-    // if (! this.head) {
-    //   this.head = node;
-    //   return this;
-    // }
+    //first node for the linked list (e.g. empty ll)
+    if (! this.head) {
+      this.head = node;
+      return this;
+    }
 
     // prepend node to the head
     let newSecondNode = this.head;
@@ -85,7 +84,6 @@ class LinkedList {
 
   //   // clean up
   //   while (current.next) {  
-  //     console.log('deleting current.previous...');
   //     delete current.previous;
   //     current = current.next;
   //   }
@@ -197,6 +195,32 @@ class LinkedList {
     return null;
   }
 
+  // return the value of the nodethat is k from the END of the linked list
+  ll_kth_from_end(k) {
+    if (Number.isInteger(k) && k > -1) {
+      let current = this.head;
+      let valueArr = [];
+      let index = -1;
+  
+      // find the last node, which will have a next value of null
+      while (current.next) {
+        
+        valueArr.push(current.value);
+        current = current.next;
+        index++;
+      }
+      if (current.next === null) {
+        valueArr.push(current.value);
+        index++;
+      }
+  
+      let finalIndex = (index - k);
+      if (Number.isInteger(finalIndex) && finalIndex > -1) {
+        return valueArr[finalIndex];
+      }
+      return false;
+    }
+  }
 
   // hmm... but what if the value isn't JSON?
   // Big O for time: O(n)
