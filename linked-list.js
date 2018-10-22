@@ -51,7 +51,7 @@ class LinkedList {
     let newSecondNode = this.head;
     this.head = node;
     node.next = newSecondNode;
-  
+    this.length++;
     return this;
   }
 
@@ -139,6 +139,7 @@ class LinkedList {
     let newNode = new Node(newValue);
     let current = this.head;
     let previous;
+    console.log('this length', this.length);
 
     while(current.next) {
       if (current.value === value){
@@ -146,11 +147,13 @@ class LinkedList {
         if (current === this.head) {
           newNode.next = current;
           this.head = newNode;
+          this.length++;
           return this;
         }
         // inside
         previous.next = newNode;
         newNode.next = current;
+        this.length++;
         return this;
       }
       previous = current;
@@ -161,10 +164,9 @@ class LinkedList {
     if (current.next === null) {
       previous.next = newNode;
       newNode.next = current;
+      this.length++;
+      return this;
     }
-
-    this.length++;
-    return this;
   }
 
 
