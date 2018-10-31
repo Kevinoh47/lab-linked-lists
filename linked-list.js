@@ -43,6 +43,7 @@ class LinkedList {
     //first node for the linked list (e.g. empty ll)
     if (! this.head) {
       this.head = node;
+      this.length++;
       return this;
     }
 
