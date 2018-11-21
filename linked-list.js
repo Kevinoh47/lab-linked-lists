@@ -143,7 +143,7 @@ class DoublyLinkedList {
         current = current.next;
         counter++;
       }
-      
+
       // removing the tail
       if (!current.next && counter === offset) {
         myPrevious.next = null;
@@ -201,6 +201,8 @@ class LinkedList {
   // Big O for space O(1)
   append(value) {
     let node = new Node(value);
+
+    console.log('APPENDING >>> ', node.value);
 
     // first node for the linked list (e.g. empty ll)
     if (!this.head) {
