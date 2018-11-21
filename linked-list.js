@@ -2,26 +2,192 @@
 
 const Node = require('./node.js');
 
-// helper function adapted from https://stackoverflow.com/questions/9804777/how-to-test-if-a-string-is-json-or-not
-let _isJson = function (item) {
-
-  console.log('Checking item ', item);
-
-  item = typeof item !== 'string' ? JSON.stringify(item) : item;
-
-  console.log('item after stringify test ', item);
-
-  try {
-    item = JSON.parse(item);
-    console.log('item after parsing ', item);
-  } 
-  catch (e) {
-    // console.log('error ', e);
-    return false;
+class DoublyLinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.next = null;
+    this.previous = null;
+    this.length = 0;
   }
 
-  return (typeof item === 'object' && item !== null) ? true : false;
-};
+  append(value) {
+    let node = new Node(value);
+  
+    // first node is head and tail
+    if (!this.head) {
+      this.head = node;
+      this.tail = node;
+      this.length = 1;
+      return this;
+    }
+
+    
+    let current = this.head;
+
+    while(current.next) {
+      current = current.next;
+    }
+    // append the new node to the tail:
+    current.next = node;
+    node.previous = current;
+    this.tail = node;
+    this.length++;
+    return this;
+  }
+
+  // prepend adds a new node to the beginning of the linked list
+  // Big O for time:  O(1)
+  // Big O for space: O(1)  
+  prepend(value) {
+    let node = new Node(value);
+
+    //first node for the linked list (e.g. empty ll)
+    if (! this.head) {
+      this.head = node;
+      this.tail = node;
+      this.length = 1;
+      return this;
+    }
+
+    // prepend node to the head
+    let newSecondNode = this.head;
+    this.head = node;
+    node.next = newSecondNode;
+    newSecondNode.previous = this.head;
+    this.length++;
+    return this;
+  }
+
+  // reverse the linked list so that the "tail" is now head 
+  // Big O for time: O(3n)
+  // Big O for space: O(3n) ??
+  reverse() {
+    let myArr = [];
+    let current = this.head;
+
+    while(current.next) {
+      myArr.push(current.value);
+      current = current.next;
+    }
+    // tail
+    if (!current.next) {
+      myArr.push(current.value);
+    }
+    
+    myArr.reverse();
+
+    let myLl = new LinkedList();
+
+    myArr.map(i => {myLl.append(i);});
+
+    return myLl;
+
+  }
+
+  reverse2() {
+    let current = this.head;
+    let reversedLl = new LinkedList();
+
+    while (current.next) {
+
+      let copy = new Node(current.value);
+      copy.previous = current.next;
+      copy.next = current.previous;
+
+      if (current === this.head) {
+        reversedLl.tail = copy;
+      }
+      current = current.next;
+    }
+
+    if (!current.next) {
+      let newHead = new Node(current.value);
+      newHead.next = current.previous;
+      reversedLl.head = newHead;
+      reversedLl.length = this.length;
+    }
+
+    return reversedLl;
+  }
+
+  // remove a node from the doubly-linked list
+  // Big O for time: O(n)
+  // Big O for space O(1)
+  remove(offset) {
+    let current = this.head;
+    let counter = 0;
+    let myPrevious;
+
+    if (offset >= 0 && offset <= this.length) {
+
+      // remove the head
+      if (current === this.head && counter === offset) {
+        this.head = current.next;
+        current.next = null;
+        this.head.previous = null;
+        this.length--;
+        return this;
+      }
+
+      // remove one from inside  
+      while (current.next) {
+        if (counter === offset) {
+          myPrevious.next = current.next;
+          current.next = null;
+          current.previous = null;
+          this.length--;
+          return this;
+        }
+        myPrevious = current;
+        current = current.next;
+        counter++;
+      }
+      
+      // removing the tail
+      if (!current.next && counter === offset) {
+        myPrevious.next = null;
+        current.previous = null;
+        this.tail = myPrevious;
+        this.length--;
+      }
+      return this;
+    } else {
+      return null; // should this throw an error instead?
+    }
+  }
+
+  // Serialize
+  // Big O for time: O(n)
+  // Big O for space O(2n)
+  serialize() {
+    let serialized = '['; 
+    let current = this.head;
+    while (current.next) {
+      if (current.value) {
+        serialized += JSON.stringify(current.value) + ', ';
+      }
+      current = current.next;
+    }
+    // the tail:
+    if (!current.next) {
+      if (current.value) {
+        serialized += JSON.stringify(current.value) + ']';
+      }
+      else {
+        serialized = serialized.substr(0, serialized.trim().length-1) + ']';
+      }
+    }
+    return serialized;
+  }
+
+  // deserialize 
+  deserialize() {
+    let serialized = this.serialize();
+    return JSON.parse(serialized);
+  }
+
+}
 
 class LinkedList {
   constructor() {
@@ -37,7 +203,7 @@ class LinkedList {
     let node = new Node(value);
 
     // first node for the linked list (e.g. empty ll)
-    if (! this.head) {
+    if (!this.head) {
       this.head = node;
       this.tail = node;
       this.length ++;
@@ -105,45 +271,6 @@ class LinkedList {
     return myLl;
 
   }
-  // reverse the linked list so that the "tail" is now head Note this method isn't quite working and is not efficient.
-  // Big O for time: O(3n)
-  // Big O for space: O(2n)
-  // reverse() {
-  //   let current = this.head;
-  //   let myPrevious = null;
-
-  //   while (current.next) {
-  //     current.previous = myPrevious;
-  //     myPrevious = current;
-  //     current = current.next;
-  //   }
-  //   // set the tail:
-  //   if (current.next === null) {
-  //     current.previous = myPrevious;
-  //     this.head = current; // the last shall be first
-  //   }
-
-  //   // now iterate backwards
-  //   while (current.previous) {
-  //     current.next = current.previous;
-  //     current = current.previous;
-  //   }
-  //   // set the tail:
-  //   if (current.previous === null) {
-  //     current.next = null;
-  //   }
-
-  //   // clean up
-  //   while (current.next) {  
-  //     delete current.previous;
-  //     current = current.next;
-  //   }
-  //   if (current.next === null) {
-  //     delete current.previous;
-  //   }
-    
-  //   return this;
-  // }
 
   // remove a node from the linked list
   // Big O for time: O(n)
@@ -151,7 +278,7 @@ class LinkedList {
   remove(offset) {
     let current = this.head;
     let counter = 0;
-    let previous;
+    let myPrevious;
 
     if (offset >= 0 && offset <= this.length) {
 
@@ -166,19 +293,19 @@ class LinkedList {
       // remove one from inside
       while (current.next) {
         if (counter === offset) {
-          previous.next = current.next;
+          myPrevious.next = current.next;
           current.next = null;
           this.length--;
           return this;
         }
-        previous = current;
+        myPrevious = current;
         current = current.next;
         counter++;
       }
       // removing the tail
       if (!current.next && counter === offset) {
-        previous.next = null;
-        this.tail = previous;
+        myPrevious.next = null;
+        this.tail = myPrevious;
         this.length--;
       }
       return this;
@@ -191,7 +318,7 @@ class LinkedList {
   insertBefore(value, newValue) {
     let newNode = new Node(newValue);
     let current = this.head;
-    let previous;
+    let myPrevious;
 
     while(current.next) {
       if (current.value === value) {
@@ -204,18 +331,18 @@ class LinkedList {
         }
 
         // inside
-        previous.next = newNode;
+        myPrevious.next = newNode;
         newNode.next = current;
         this.length++;
         return this;
       }
-      previous = current;
+      myPrevious = current;
       current = current.next;
     }
     //test the tail
     if (current.next === null) {
       if (current.value === value){
-        previous.next = newNode;
+        myPrevious.next = newNode;
         newNode.next = current;
         this.tail = current;
         this.length++;
