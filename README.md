@@ -1,5 +1,7 @@
 ![cf](http://i.imgur.com/7v5ASc8.png) Linked List Data Structure
 ================================================================
+# Travis
+[![Build Status](https://travis-ci.com/Kevinoh47/lab-linked-lists.svg?branch=working-link-lists)](https://travis-ci.com/Kevinoh47/lab-linked-lists)
 
 ## Submission Instructions
 * Follow the data structures submission instructions
