@@ -111,6 +111,32 @@ class DoublyLinkedList {
     return reversedLl;
   }
 
+  ll_kth_from_end(k) {
+    if (Number.isInteger(k) && k > -1) {
+      let current = this.head;
+      let valueArr = [];
+      let index = -1;
+  
+      // find the last node, which will have a next value of null
+      while (current.next) {
+        
+        valueArr.push(current.value);
+        current = current.next;
+        index++;
+      }
+      if (current.next === null) {
+        valueArr.push(current.value);
+        index++;
+      }
+  
+      let finalIndex = (index - k);
+      if (Number.isInteger(finalIndex) && finalIndex > -1) {
+        return valueArr[finalIndex];
+      }
+      return false;
+    }
+  }
+
   // remove a node from the doubly-linked list
   // Big O for time: O(n)
   // Big O for space O(1)
@@ -201,8 +227,6 @@ class LinkedList {
   // Big O for space O(1)
   append(value) {
     let node = new Node(value);
-
-    console.log('APPENDING >>> ', node.value);
 
     // first node for the linked list (e.g. empty ll)
     if (!this.head) {
@@ -440,4 +464,4 @@ class LinkedList {
 
 }
 
-module.exports = LinkedList;
+module.exports = {LinkedList, DoublyLinkedList};
