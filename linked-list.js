@@ -2,9 +2,31 @@
 
 const Node = require('./node.js');
 
+// helper function adapted from https://stackoverflow.com/questions/9804777/how-to-test-if-a-string-is-json-or-not
+let _isJson = function (item) {
+
+  console.log('Checking item ', item);
+
+  item = typeof item !== 'string' ? JSON.stringify(item) : item;
+
+  console.log('item after stringify test ', item);
+
+  try {
+    item = JSON.parse(item);
+    console.log('item after parsing ', item);
+  } 
+  catch (e) {
+    // console.log('error ', e);
+    return false;
+  }
+
+  return (typeof item === 'object' && item !== null) ? true : false;
+};
+
 class LinkedList {
   constructor() {
     this.head = null;
+    this.tail = null;
     this.length = 0;
   }
 
@@ -17,6 +39,7 @@ class LinkedList {
     // first node for the linked list (e.g. empty ll)
     if (! this.head) {
       this.head = node;
+      this.tail = node;
       this.length ++;
       return this;
     }
@@ -30,6 +53,7 @@ class LinkedList {
 
     // break out of the loop, and the current node's next is null. Set next to the new node
     current.next = node;
+    this.tail = node;
     this.length++;
     return this;
   }
@@ -43,6 +67,7 @@ class LinkedList {
     //first node for the linked list (e.g. empty ll)
     if (! this.head) {
       this.head = node;
+      this.tail = node;
       this.length++;
       return this;
     }
@@ -56,6 +81,31 @@ class LinkedList {
   }
 
   // reverse the linked list so that the "tail" is now head 
+  // Big O for time: O(3n)
+  // Big O for space: O(3n) ??
+  reverse() {
+    let myArr = [];
+    let current = this.head;
+
+    while(current.next) {
+      myArr.push(current.value);
+      current = current.next;
+    }
+    // tail
+    if (!current.next) {
+      myArr.push(current.value);
+    }
+    
+    myArr.reverse();
+
+    let myLl = new LinkedList();
+
+    myArr.map(i => {myLl.append(i);});
+
+    return myLl;
+
+  }
+  // reverse the linked list so that the "tail" is now head Note this method isn't quite working and is not efficient.
   // Big O for time: O(3n)
   // Big O for space: O(2n)
   // reverse() {
@@ -104,6 +154,7 @@ class LinkedList {
     let previous;
 
     if (offset >= 0 && offset <= this.length) {
+
       // remove the head
       if (current === this.head && counter === offset) {
         this.head = current.next;
@@ -111,6 +162,7 @@ class LinkedList {
         this.length--;
         return this;
       }
+
       // remove one from inside
       while (current.next) {
         if (counter === offset) {
@@ -126,6 +178,7 @@ class LinkedList {
       // removing the tail
       if (!current.next && counter === offset) {
         previous.next = null;
+        this.tail = previous;
         this.length--;
       }
       return this;
@@ -141,7 +194,7 @@ class LinkedList {
     let previous;
 
     while(current.next) {
-      if (current.value === value){
+      if (current.value === value) {
         // head
         if (current === this.head) {
           newNode.next = current;
@@ -149,6 +202,7 @@ class LinkedList {
           this.length++;
           return this;
         }
+
         // inside
         previous.next = newNode;
         newNode.next = current;
@@ -163,6 +217,7 @@ class LinkedList {
       if (current.value === value){
         previous.next = newNode;
         newNode.next = current;
+        this.tail = current;
         this.length++;
         return this;
       }
@@ -186,9 +241,10 @@ class LinkedList {
     }
     //test the tail
     if (current.next === null) {
-      if (current.value === value){
+      if (current.value === value) {
         newNode.next = null;
         current.next = newNode;
+        this.tail = newNode;
         this.length++;
         return this;
       }
@@ -223,34 +279,36 @@ class LinkedList {
     }
   }
 
-  // hmm... but what if the value isn't JSON?
+  // Serialize
   // Big O for time: O(n)
   // Big O for space O(2n)
-  // serialize() {
-  //   let serialized = ''; 
-  //   let current = this.head;
-  //   while (current.next) {
-  //     serialized += JSON.stringify(this.current) + ' ';
-  //   }
-  //   //don't forget the tail:
-  //   if (!current.next) {
-  //     serialized += JSON.stringify(this.current);
-  //   }
-  //   return serialized;
-  // }
+  serialize() {
+    let serialized = '['; 
+    let current = this.head;
+    while (current.next) {
+      if (current.value) {
+        serialized += JSON.stringify(current.value) + ', ';
+      }
+      current = current.next;
+    }
+    //don't forget the tail:
+    if (!current.next) {
+      if (current.value) {
+        serialized += JSON.stringify(current.value) + ']';
+      }
+      else {
+        serialized = serialized.substr(0, serialized.trim().length-1) + ']';
+      }
+    }
+    return serialized;
+  }
 
-  // Big O for time: O(n)
-  // Big O for space O(2n)
-  // deserialize() {
-  //   let current = this.head;
-  //   while (current.next) {
-  //     return JSON.parse(current); 
-  //   }
-  //   //don't forget the tail:
-  //   if (!current.next) {
-  //     return JSON.parse(current); 
-  //   }
-  // }
+  // deserialize 
+  deserialize() {
+    let serialized = this.serialize();
+    return JSON.parse(serialized);
+  }
+
 }
 
 module.exports = LinkedList;
